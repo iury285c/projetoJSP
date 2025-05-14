@@ -1,0 +1,20 @@
+CREATE TABLE public.model_login
+(
+login character varying(50) not null,
+senha character varying(50) not null,
+id integer not null default nextval('model_login_id_seq':: regclass),
+nome character varying(75) not null,
+email character varying(100) not null
+CONSTRAINT login_unique UNIQUE (LOGIN),
+CONSTRAINT model_login_pkey PRIMARY KEY (id)
+)
+WITH (
+OIDS=FALSE
+);
+ALTER TABLE public.model_login
+OWNER TO postgres;
+
+
+INSERT INTO public.model_login(
+	login, senha)
+	VALUES (admin, admin);
