@@ -3,9 +3,11 @@ package dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.naming.java.javaURLContextFactory;
 import org.eclipse.jdt.internal.compiler.ast.ReturnStatement;
 
 import connection.SingleConnectionBanco;
@@ -29,7 +31,7 @@ public class DAOUsuarioRepository {
 		
 		if (objeto.isNovo()) {
 			
-			String sql = "INSERT INTO model_login(login, senha, nome, email, usuario_id, perfil, sexo) VALUES (?, ?,?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO model_login(login, senha, nome, email, usuario_id, perfil, sexo, cep, rua, bairro, cidade, uf, numero, datanascimento, rendamensal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparasql = connection.prepareStatement(sql);
 			
 			// A ordem dos parâmetros no PreparedStatement deve corresponder exatamente à ordem das colunas esperadas na instrução SQL,
@@ -41,10 +43,30 @@ public class DAOUsuarioRepository {
 			preparasql.setLong(5, userLogado);
 			preparasql.setString(6, objeto.getPerfil());
 			preparasql.setString(7, objeto.getSexo());
+			preparasql.setString(8, objeto.getCep());
+			preparasql.setString(9, objeto.getRua());
+			preparasql.setString(10, objeto.getBairro());
+			preparasql.setString(11, objeto.getCidade());
+			preparasql.setString(12, objeto.getUf());
+			preparasql.setString(13, objeto.getNumero());
+			preparasql.setDate(14, objeto.getDataNascimento());
+			preparasql.setDouble(15, objeto.getRendaMensal());
+			
 			preparasql.execute();
 			connection.commit();
+			
+			if (objeto.getFotouser() != null && !objeto.getFotouser().isEmpty()) {
+			sql= "update model_login set fotouser =?, extensaofotouser=? where login =?";
+			preparasql = connection.prepareStatement(sql);
+			preparasql.setString(1, objeto.getFotouser());
+			preparasql.setString(2, objeto.getExtensaofotouser());
+			preparasql.setString(3, objeto.getLogin());
+			preparasql.execute();
+			connection.commit();
+			}
 		}else {
-			String sql = "UPDATE model_login SET login=?, senha=?, nome=?, email=?, perfil=?, sexo=? WHERE id = "+objeto.getId()+";";
+			String sql = "UPDATE model_login SET login=?, senha=?, nome=?, email=?, perfil=?, sexo=?, cep=?, rua=?, bairro=?, cidade=?, uf=?, numero=?, datanascimento=?, rendamensal=?  WHERE id = "+objeto.getId()+";";
+			
 			PreparedStatement preparasql = connection.prepareStatement(sql);
 			preparasql.setString(1, objeto.getLogin());
 			preparasql.setString(2, objeto.getSenha());
@@ -52,8 +74,29 @@ public class DAOUsuarioRepository {
 			preparasql.setString(4, objeto.getEmail());
 			preparasql.setString(5, objeto.getPerfil());
 			preparasql.setString(6, objeto.getSexo());
+			preparasql.setString(7, objeto.getCep());
+			preparasql.setString(8, objeto.getRua());
+			preparasql.setString(9, objeto.getBairro());
+			preparasql.setString(10, objeto.getCidade());
+			preparasql.setString(11, objeto.getUf());
+			preparasql.setString(12, objeto.getNumero());
+			preparasql.setDate(13, objeto.getDataNascimento());
+			preparasql.setDouble(14, objeto.getRendaMensal());
+			
+			
 			preparasql.executeUpdate();
 			connection.commit();
+			
+			if (objeto.getFotouser() != null && !objeto.getFotouser().isEmpty()) {
+				sql= "update model_login set fotouser = ?, extensaofotouser=? where login = ?";
+				preparasql = connection.prepareStatement(sql);
+				preparasql.setString(1, objeto.getFotouser());
+				preparasql.setString(2, objeto.getExtensaofotouser());
+				preparasql.setLong(3, objeto.getId());
+				preparasql.execute();
+				connection.commit();
+				
+			}
 		}	
 
 	} catch (Exception e) {
@@ -106,6 +149,16 @@ public class DAOUsuarioRepository {
 			modelLogin.setUseradmin(resultado.getBoolean("useradmin"));
 			modelLogin.setPerfil(resultado.getString("perfil"));
 			modelLogin.setSexo(resultado.getString("sexo"));
+			modelLogin.setCep(resultado.getString("cep"));
+			modelLogin.setRua(resultado.getString("rua"));
+			modelLogin.setBairro(resultado.getString("bairro"));
+			modelLogin.setCidade(resultado.getString("cidade"));
+			modelLogin.setUf(resultado.getString("uf"));
+			modelLogin.setNumero(resultado.getString("numero"));
+			modelLogin.setDataNascimento(resultado.getDate("datanascimento"));
+			modelLogin.setRendaMensal(resultado.getDouble("rendamensal"));
+			
+			
 		}
 		return modelLogin;
 	}
@@ -125,6 +178,15 @@ public class DAOUsuarioRepository {
 			modelLogin.setUseradmin(resultado.getBoolean("useradmin"));
 			modelLogin.setPerfil(resultado.getString("perfil"));
 			modelLogin.setSexo(resultado.getString("sexo"));
+			modelLogin.setFotouser(resultado.getString("fotouser"));
+			modelLogin.setCep(resultado.getString("cep"));
+			modelLogin.setRua(resultado.getString("rua"));
+			modelLogin.setBairro(resultado.getString("bairro"));
+			modelLogin.setCidade(resultado.getString("cidade"));
+			modelLogin.setUf(resultado.getString("uf"));
+			modelLogin.setNumero(resultado.getString("numero"));
+			modelLogin.setDataNascimento(resultado.getDate("datanascimento"));
+			modelLogin.setRendaMensal(resultado.getDouble("rendamensal"));
 			
 		}
 		return modelLogin;
@@ -144,6 +206,15 @@ public class DAOUsuarioRepository {
 			modelLogin.setNome(resultado.getString("nome"));
 			modelLogin.setPerfil(resultado.getString("perfil"));
 			modelLogin.setSexo(resultado.getString("sexo"));
+			modelLogin.setFotouser(resultado.getString("fotouser"));
+			modelLogin.setCep(resultado.getString("cep"));
+			modelLogin.setRua(resultado.getString("rua"));
+			modelLogin.setBairro(resultado.getString("bairro"));
+			modelLogin.setCidade(resultado.getString("cidade"));
+			modelLogin.setUf(resultado.getString("uf"));
+			modelLogin.setNumero(resultado.getString("numero"));
+			modelLogin.setDataNascimento(resultado.getDate("datanascimento"));
+			modelLogin.setRendaMensal(resultado.getDouble("rendamensal"));
 		}
 		return modelLogin;
 	}
@@ -167,6 +238,36 @@ public class DAOUsuarioRepository {
 		connection.commit();
 	}
 	
+	public ModelLogin consultarUsuarioID(Long id ) throws Exception {
+		ModelLogin modelLogin = new ModelLogin();
+		String sql = "select * from model_login where id = ? and useradmin is false";
+		PreparedStatement statement = connection.prepareStatement(sql);
+		statement.setLong(1, id);
+		
+		ResultSet resultado = statement.executeQuery();
+		
+		while (resultado.next()) {
+			modelLogin.setId(resultado.getLong("id"));
+			modelLogin.setEmail(resultado.getString("email"));
+			modelLogin.setLogin(resultado.getString("login"));
+			modelLogin.setSenha(resultado.getString("senha"));
+			modelLogin.setNome(resultado.getString("nome"));
+			modelLogin.setPerfil(resultado.getString("perfil"));
+			modelLogin.setSexo(resultado.getString("sexo"));
+			modelLogin.setFotouser(resultado.getString("fotouser"));
+			modelLogin.setCep(resultado.getString("cep"));
+			modelLogin.setRua(resultado.getString("rua"));
+			modelLogin.setBairro(resultado.getString("bairro"));
+			modelLogin.setCidade(resultado.getString("cidade"));
+			modelLogin.setUf(resultado.getString("uf"));
+			modelLogin.setNumero(resultado.getString("numero"));
+			modelLogin.setDataNascimento(resultado.getDate("datanascimento"));
+			modelLogin.setRendaMensal(resultado.getDouble("rendamensal"));
+		}
+		return modelLogin;
+	
+	}
+	
 	public ModelLogin consultarUsuarioID(String id, Long userLogado) throws Exception {
 		ModelLogin modelLogin = new ModelLogin();
 		String sql = "select * from model_login where id = ? and useradmin is false and usuario_id = ?";
@@ -183,14 +284,24 @@ public class DAOUsuarioRepository {
 			modelLogin.setNome(resultado.getString("nome"));
 			modelLogin.setPerfil(resultado.getString("perfil"));
 			modelLogin.setSexo(resultado.getString("sexo"));
+			modelLogin.setFotouser(resultado.getString("fotouser"));
+			modelLogin.setCep(resultado.getString("cep"));
+			modelLogin.setRua(resultado.getString("rua"));
+			modelLogin.setBairro(resultado.getString("bairro"));
+			modelLogin.setCidade(resultado.getString("cidade"));
+			modelLogin.setUf(resultado.getString("uf"));
+			modelLogin.setNumero(resultado.getString("numero"));
+			modelLogin.setDataNascimento(resultado.getDate("datanascimento"));
+			modelLogin.setRendaMensal(resultado.getDouble("rendamensal"));
+			
 		}
 		return modelLogin;
 	
 	}
 	
-	public List<ModelLogin> consultaUsuarioList(Long userLogado ) throws Exception {
+	public List<ModelLogin> consultaUsuarioList(Long userLogado) throws Exception {
 		List<ModelLogin> retorno = new ArrayList<ModelLogin>();
-		String sql = "SELECT * FROM model_login WHERE useradmin IS FALSE and usuario_id =" +userLogado;
+		String sql = "SELECT * FROM model_login WHERE useradmin IS FALSE and usuario_id =" + userLogado;
 		PreparedStatement statement = connection.prepareStatement(sql); 
 	    ResultSet resultado = statement.executeQuery();
 	   
@@ -203,10 +314,114 @@ public class DAOUsuarioRepository {
 		//modelLogin.setSenha(resultado.getString("senha"));
 		modelLogin.setPerfil(resultado.getString("perfil"));
 		
+		
 		retorno.add(modelLogin);
 		
 	}
 		
 		return retorno;
 	}
+	
+	public List<ModelLogin> consultaUsuarioListPaginada(Long userLogado, Integer offset ) throws Exception {
+		List<ModelLogin> retorno = new ArrayList<ModelLogin>();
+		String sql = "SELECT * FROM model_login WHERE useradmin IS FALSE and usuario_id =" + userLogado + " order by nome offset " + offset + " limit 5";
+		PreparedStatement statement = connection.prepareStatement(sql); 
+	    ResultSet resultado = statement.executeQuery();
+	   
+	   while (resultado.next()) {
+		ModelLogin modelLogin = new ModelLogin();
+		modelLogin.setEmail(resultado.getString("email"));
+		modelLogin.setId(resultado.getLong("id"));
+		modelLogin.setNome(resultado.getString("nome"));
+		modelLogin.setLogin(resultado.getString("login"));
+		//modelLogin.setSenha(resultado.getString("senha"));
+		modelLogin.setPerfil(resultado.getString("perfil"));
+		
+		
+		retorno.add(modelLogin);
+		
+	}
+		
+		return retorno;
+	}
+	
+public List<ModelLogin> consultaUsuarioListOffSet(String nome, Long userLogado, int offset) throws Exception {
+		
+		List<ModelLogin> retorno = new ArrayList<ModelLogin>();
+		
+		String sql = "select * from model_login  where upper(nome) like upper(?) and useradmin is false and usuario_id = ? offset "+offset+" limit 5";
+		PreparedStatement statement = connection.prepareStatement(sql);
+		statement.setString(1, "%" + nome + "%");
+		statement.setLong(2, userLogado);
+		
+		ResultSet resultado = statement.executeQuery();
+		
+		while (resultado.next()) { /*percorrer as linhas de resultado do SQL*/
+			
+			ModelLogin modelLogin = new ModelLogin();
+			
+			modelLogin.setEmail(resultado.getString("email"));
+			modelLogin.setId(resultado.getLong("id"));
+			modelLogin.setLogin(resultado.getString("login"));
+			modelLogin.setNome(resultado.getString("nome"));
+			//modelLogin.setSenha(resultado.getString("senha"));
+			modelLogin.setPerfil(resultado.getString("perfil"));
+			modelLogin.setSexo(resultado.getString("sexo"));
+			
+			retorno.add(modelLogin);
+		}
+		
+		
+		return retorno;
+	}
+
+		
+		
+
+	
+	public int totalPagina(Long userLogado) throws Exception {
+		String sql = "select count(1) as total from model_login where usuario_id =" + userLogado;
+		PreparedStatement statement = connection.prepareStatement(sql);
+		ResultSet resultado = statement.executeQuery();
+		resultado.next();
+		Double cadastros = resultado.getDouble("total");
+		Double porpagina = 5.0;
+		Double pagina = cadastros / porpagina;
+		Double resto = pagina % 2;
+		
+		if (resto > 0) {
+			pagina ++;
+		}
+		return pagina.intValue();
+	}
+
+public int consultaUsuarioListTotalPaginaPaginacao(String nome, Long userLogado) throws Exception {
+		
+		
+		String sql = "select count(1) as total from model_login  where upper(nome) like upper(?) and useradmin is false and usuario_id = ? ";
+	
+		PreparedStatement statement = connection.prepareStatement(sql);
+		statement.setString(1, "%" + nome + "%");
+		statement.setLong(2, userLogado);
+		
+		ResultSet resultado = statement.executeQuery();
+		
+		resultado.next();
+		
+		Double cadastros = resultado.getDouble("total");
+		
+		Double porpagina = 5.0;
+		
+		Double pagina = cadastros / porpagina;
+		
+		Double resto = pagina % 2;
+		
+		if (resto > 0) {
+			pagina ++;
+		}
+		
+		return pagina.intValue();
+		
+	}
+
 }

@@ -1,6 +1,8 @@
 package model;
 
 import java.io.Serializable;
+import java.sql.Date;
+
 
 public class ModelLogin implements Serializable {
 
@@ -16,8 +18,72 @@ public class ModelLogin implements Serializable {
 	private String sexo;
 	private String fotouser;
 	private String extensaofotouser;
+	private String cep;
+	private String rua;
+	private String bairro;
+	private String cidade;
+	private String uf;
+	private String numero;
+	private Date dataNascimento;
+	private Double rendaMensal;
 	
 	
+	
+	public void setRendaMensal(Double rendaMensal) {
+		this.rendaMensal = rendaMensal;
+	}
+	
+	public Double getRendaMensal() {
+		return rendaMensal;
+	}
+
+	public String getCep() {
+		return cep;
+	}
+
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+
+	public String getRua() {
+		return rua;
+	}
+
+	public void setRua(String rua) {
+		this.rua = rua;
+	}
+
+	public String getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
+
+	public String getCidade() {
+		return cidade;
+	}
+
+	public void setCidade(String cidade) {
+		this.cidade = cidade;
+	}
+
+	public String getUf() {
+		return uf;
+	}
+
+	public void setUf(String uf) {
+		this.uf = uf;
+	}
+
+	public String getNumero() {
+		return numero;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
 
 	public String getSexo() {
 		return sexo;
@@ -109,5 +175,17 @@ public class ModelLogin implements Serializable {
 	public void setFotouser(String fotouser) {
 		this.fotouser = fotouser;
 	}
+
+	public Date getDataNascimento() {
+		return dataNascimento;
+	}
+
+	public void setDataNascimento(Date dataNascimento) {
+		this.dataNascimento = dataNascimento;
+	}
+
+
+
+	
 
 }

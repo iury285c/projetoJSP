@@ -1,10 +1,12 @@
 <%@page import="model.ModelLogin"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
-<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
-
-
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="ISO-8859-1"%>
+ 
+ <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>   
+    
 <!DOCTYPE html>
 <html lang="en">
+
 
 <jsp:include page="head.jsp"></jsp:include>
 
@@ -41,7 +43,7 @@
                                                 <!-- Basic Form Inputs card start -->
                                                 <div class="card">
                                                     <div class="card-block">
-                                                        <h3 class="sub-title">Cad.Usuário</h3>
+                                                        <h3 class="sub-title">Cad.Usuario</h3>
 
                                                         <form Class="form-material" enctype="multipart/form-data" action="<%= request.getContextPath() %>/ServletUsuarioController" method="post" id="formUser">
                                                         
@@ -54,8 +56,19 @@
                                                                 </div>
                                                              <div class="input-group mb-4">
                                                                <div class="input-group-prepend">
-                                                               <img alt="Imagem User" id="fotoembase64" src="" width="70px">
-                                                               </div>
+																	<c:choose>
+																		<c:when test="${not empty modelLogin.fotouser}">
+																			<img alt="Imagem User" id="fotoembase64"
+																				src="data:image/jpeg;base64,${modelLogin.fotouser}"
+																				width="70px">
+																		</c:when>
+																		<c:otherwise>
+																			<img alt="Imagem User" id="fotoembase64"
+																				src="assets/images/user.png" width="70px">
+																		</c:otherwise>
+																	</c:choose>
+
+																</div>
                                                                <input type='file' id="fileFoto" name="fileFoto" accept="image/*" onchange="visualizarImg('fotoembase64', 'fileFoto')" class="form-control-life">
                                                             </div>   
 
@@ -65,7 +78,22 @@
                                                                 <div class="col-sm-4">
                                                                     <input type="text" name="nome" id="nome" class="form-control" required="required" autocomplete="off" value="${modelLogin.nome}">
                                                                 </div>
-                                                            </div>
+                                                           </div>
+                                                           
+                                                           <div class="form-group row">
+                                                                <label class="col-sm-2 col-form-label">Data De Nascimento</label>
+                                                                <div class="col-sm-4">
+                                                                    <input type="text" name="dataNascimento" id="dataNascimento" class="form-control" required="required" autocomplete="off" value="${modelLogin.dataNascimento}">
+                                                                </div>
+                                                           </div>
+                                                             
+                                                           <div class="form-group row">
+                                                                <label class="col-sm-2 col-form-label">Renda Mensal</label>
+                                                                <div class="col-sm-4">
+                                                                    <input type="text" name="rendamensal" id="rendamensal" class="form-control" required="required" autocomplete="off" value="${modelLogin.rendaMensal}">
+                                                                </div>
+                                                           </div>
+                                                           
                                                             
                                                             <div class="form-group row">
                                                                 <label class="col-sm-2 col-form-label">Email</label>
@@ -73,6 +101,48 @@
                                                                     <input type="email" name="email" id="email" class="form-control" required="required" autocomplete="off" value="${modelLogin.email}">
                                                                 </div>
                                                             </div>
+                                                            
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-2 col-form-label">Cep</label>
+                                                                <div class="col-sm-4">
+                                                                    <input onblur="pesquisarCep();" type="text" name="cep" id="cep" class="form-control" required="required" autocomplete="off" value="${modelLogin.cep}">
+                                                                </div>
+                                                            </div> 
+                                                            
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-2 col-form-label">Rua</label>
+                                                                <div class="col-sm-4">
+                                                                    <input type="text" name="rua" id="rua" class="form-control" required="required" autocomplete="off" value="${modelLogin.rua}">
+                                                                </div>
+                                                            </div> 
+                                                            
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-2 col-form-label">Bairro</label>
+                                                                <div class="col-sm-4">
+                                                                    <input type="text" name="bairro" id="bairro" class="form-control" required="required" autocomplete="off" value="${modelLogin.bairro}">
+                                                                </div>
+                                                            </div> 
+                                                            
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-2 col-form-label">Cidade</label>
+                                                                <div class="col-sm-4">
+                                                                    <input type="text" name="cidade" id="cidade" class="form-control" required="required" autocomplete="off" value="${modelLogin.cidade}">
+                                                                </div>
+                                                            </div> 
+                                                            
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-2 col-form-label">Uf</label>
+                                                                <div class="col-sm-4">
+                                                                    <input type="text" name="uf" id="uf" class="form-control" required="required" autocomplete="off" value="${modelLogin.uf}">
+                                                                </div>
+                                                            </div> 
+                                                            
+                                                            <div class="form-group row">
+                                                                <label class="col-sm-2 col-form-label">Numero</label>
+                                                                <div class="col-sm-4">
+                                                                    <input type="text" name="numero" id="numero" class="form-control" required="required" autocomplete="off" value="${modelLogin.numero}">
+                                                                </div>
+                                                            </div> 
                                                             
                                                             <div class="form-group row">
                                                                 <label class="col-sm-2 col-form-label">Login</label>
@@ -165,6 +235,9 @@
                                                             <button type="submit" onclick="document.getElementById('acao').value='salvar'" class="btn btn-primary">Salvar</button>
                                                             <button type="button" onclick="criarDelete()" class="btn btn-primary waves-effect waves-light">Deletar</button>
                                                             <button type="button" class="btn btn-primary" data-toggle="modal"  data-target="#exampleModal">Buscar Usuário</button>
+                                                            <c:if test="${modelLogin.id > 0 }">
+                                                                 <a href=" <%= request.getContextPath() %>/ServletTelefone?iduser=${modelLogin.id}" class="btn btn-primary waves-effect waves-light" > Telefone</a>
+                                                            </c:if>
                                                         </form>
 
                                                     </div>
@@ -186,12 +259,31 @@
 														<tr>
 															<td><c:out value="${ml.id}"></c:out></td>
 															<td><c:out value="${ml.nome}"></c:out></td>
-															<td><a class="btn btn-primary" href=<%=request.getContextPath() %>/ServletUsuarioController?acao=buscarEditar&id=${ml.id}>ver</a></td>
+															<td>
+															<a class="btn btn-primary" href=<%=request.getContextPath() %>/ServletUsuarioController?acao=buscarEditar&id=${ml.id}>ver</a></td>
 														</tr>
 													</c:forEach>
 												</tbody>
 											</table>
 										</div>
+
+
+										<nav aria-label="Page navigation example">
+											<ul class="pagination">
+
+												<%
+												int totalPagina = (int) request.getAttribute("totalPagina");
+
+												for (int p = 0; p < totalPagina; p++) {
+													String url = request.getContextPath() + "/ServletUsuarioController?acao=paginar&pagina=" + p;
+													out.print("<li class=\"page-item\"><a class=\"page-link\" href=\"" + url + "\">" + (p + 1) + "</a></li>");
+												}
+												%>
+
+
+
+											</ul>
+										</nav>
 
 									</div>
                                 </div>
@@ -253,6 +345,73 @@
     
     <script type="text/javascript">
     
+    $(document).ready(function () {
+    	  let rawVal = $('#rendamensal').val(); 
+    	  
+    	  
+    	  if (rawVal && rawVal.includes('.')) {
+    	    let floatVal = parseFloat(rawVal);
+    	    
+    	    
+    	    rawVal = floatVal.toLocaleString('pt-BR', {
+    	      minimumFractionDigits: 2,
+    	      maximumFractionDigits: 2
+    	    });
+
+    	    $('#rendamensal').val(rawVal);
+    	  }
+
+    	  
+    	  $('#rendamensal').maskMoney({
+    	    prefix: 'R$ ',
+    	    thousands: '.',
+    	    decimal: ',',
+    	    allowZero: true,
+    	    allowNegative: false,
+    	    affixesStay: true
+    	  });
+
+    	  $('#rendamensal').maskMoney('mask');
+    	});
+
+
+    var dataNascimento = $("#dataNascimento").val();
+
+
+    var dateFormat = new Date(dataNascimento);
+
+
+    $("#dataNascimento").val(dateFormat.toLocaleDateString('pt-BR',{timeZone: 'UTC'}));
+
+
+    $("#nome").focus();
+
+
+
+
+    $( function() {
+    	  
+    	  $("#dataNascimento").datepicker({
+    		    dateFormat: 'dd/mm/yy',
+    		    dayNames: ['Domingo','Segunda','Ter�a','Quarta','Quinta','Sexta','S�bado'],
+    		    dayNamesMin: ['D','S','T','Q','Q','S','S','D'],
+    		    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','S�b','Dom'],
+    		    monthNames: ['Janeiro','Fevereiro','Mar�o','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+    		    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+    		    nextText: 'Pr�ximo',
+    		    prevText: 'Anterior'
+    		});
+    } );
+
+    
+    $("#numero").keypress(function (event){
+    	return /\d/.test(String.fromCharCode(event.keyCode));
+    });
+    
+    $("#cep").keypress(function (event){
+    	return /\d/.test(String.fromCharCode(event.keyCode));
+    });
+    
     function Detalhes(id){
     
     	var urlAction = document.getElementById('formUser').action;
@@ -289,6 +448,54 @@
     		});
     	}
     }
+    
+    function buscaUserPagAjax(url){
+    	   
+        
+        var urlAction = document.getElementById('formUser').action;
+        var nomeBusca = document.getElementById('nomeBusca').value;
+        
+    	 $.ajax({	     
+    	     method: "get",
+    	     url : urlAction,
+    	     data : url,
+    	     success: function (response, textStatus, xhr) {
+    		 
+    		 var json = JSON.parse(response);
+    		 
+    		 
+    		 $('#tabelaresultados > tbody > tr').remove();
+    		 $("#ulPaginacaoUserAjax > li").remove();
+    		 
+    		  for(var p = 0; p < json.length; p++){
+    		      $('#tabelaresultados > tbody').append('<tr> <td>'+ json[p].id +'</td> <td> '+ json[p].nome +'</td> <td><button onclick="verEditar('+ json[p].id +')" type="button" class="btn btn-info">Ver</button></td></tr>');
+    		  }
+    		  
+    		  document.getElementById('totalResultados').textContent = 'Resultados: ' + json.length;
+    		  
+    		    var totalPagina = xhr.getResponseHeader("totalPagina");
+    	
+    		  
+    		    
+    			  for (var p = 0; p < totalPagina; p++){
+    			      
+    		
+    			      
+    			      var url = 'nomeBusca=' + nomeBusca + '&acao=buscarUserAjaxPage&pagina=' + (p * 5);
+    			      
+    			   
+    			      $("#ulPaginacaoUserAjax").append('<li class="page-item"><a class="page-link" href="#" onclick="buscaUserPagAjax(\''+url+'\')">'+ (p + 1) +'</a></li>'); 
+    			      
+    			  }
+    		 
+    	     }
+    	     
+    	 }).fail(function(xhr, status, errorThrown){
+    	    alert('Erro ao buscar usu�rio por nome: ' + xhr.responseText);
+    	 });
+        
+    }
+
     
     function criarDeleteComAjax(){
     	
@@ -346,6 +553,21 @@
         } else {
             preview.src = '';
         }
+    }
+    
+    function pesquisarCep(){
+    	var cep = $("#cep").val();
+    	
+    	$.getJSON("https://viacep.com.br/ws/" + cep + "/json/?callback=?", function(dados) {
+    		if(!("erro" in dados)) {
+    			$("#cep").val(dados.cep);
+    			$("#rua").val(dados.logradouro);
+    			$("#bairro").val(dados.bairro);
+    			$("#cidade").val(dados.localidade);
+    			$("#uf").val(dados.uf);
+    			$("#numero").val(dados.numero);
+    		}
+    	});
     }
     
     </script>
