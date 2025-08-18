@@ -1,8 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>   
 <!DOCTYPE html>
 <html lang="en">
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 
 <jsp:include page="head.jsp"></jsp:include>
 
@@ -64,6 +65,29 @@
 																</div>
 																
 																</form>
+
+														<div style="height: 300px; overflow: scroll;">
+															<table class="table table-dark" id="view">
+																<thead>
+																	<tr>
+																		<th scope="col">ID</th>
+																		<th scope="col">Nome Completo</th>
+																		
+																	</tr>
+																</thead>
+																<tbody>
+																	<c:forEach items="${listaUser}" var="ml">
+																		<tr>
+																			<td><c:out value="${ml.id}"></c:out></td>
+																			<td><c:out value="${ml.nome}"></c:out></td>
+																			
+																		</tr>
+																	</c:forEach>
+																</tbody>
+															</table>
+														</div>
+
+
 													</div>
 
 

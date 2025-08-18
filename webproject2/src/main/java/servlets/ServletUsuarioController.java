@@ -129,6 +129,13 @@ public class ServletUsuarioController extends ServletGenericUtil {
 			} else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("imprimirRelatorioUser")) {
 				String dataInicial =request.getParameter("dataInicial");
 				String dataFinal = request.getParameter("dataFinal");
+				
+				if (dataInicial ==  null || dataInicial.isEmpty() 
+						&& dataFinal == null || dataFinal.isEmpty()) {
+					
+					request.setAttribute("listaUser", daoUsuarioRepository.consultaUsuarioListRel(super.getUserLogado(request)));
+				}
+				
 				request.setAttribute("dataInicial", dataInicial);
 				request.setAttribute("datafinal", dataFinal);
 				request.getRequestDispatcher("principal/reluser.jsp").forward(request, response);
