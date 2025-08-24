@@ -509,7 +509,8 @@
     			url : urlAction,
     			data : "id=" + idUser + '&acao=deletarajax',
     			success: function (response){
-    				alert(response);
+    				limparForm();
+    				document.getElementById('msg').textContent = response;
     			}
     		}).fail(function(xhr, status, errorThrown){
     			alert('Erro ao deletar usuario por id: ' + xhr.responseText)
