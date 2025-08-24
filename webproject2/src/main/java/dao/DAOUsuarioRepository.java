@@ -35,7 +35,7 @@ public class DAOUsuarioRepository {
 		
 		if (objeto.isNovo()) {
 			
-			String sql = "INSERT INTO model_login(login, senha, nome, email, usuario_id, perfil, sexo, cep, rua, bairro, cidade, uf, numero, datanascimento, rendamensal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO model_login(login, senha, nome, email, usuario_id, perfil, sexo, cep, rua, bairro, cidade, uf, numero, datanascimento, rendamensal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement preparasql = connection.prepareStatement(sql);
 			
 			// A ordem dos parâmetros no PreparedStatement deve corresponder exatamente à ordem das colunas esperadas na instrução SQL,
@@ -369,7 +369,7 @@ public class DAOUsuarioRepository {
 		//modelLogin.setSenha(resultado.getString("senha"));
 		modelLogin.setPerfil(resultado.getString("perfil"));
 		modelLogin.setDataNascimento(resultado.getDate("datanascimento"));
-	    modelLogin.setSexo(resultado.getString("sexo"));
+	    //modelLogin.setSexo(resultado.getString("sexo"));
 		modelLogin.setTelefones(this.listFone(modelLogin.getId()));
 		
 		
@@ -504,7 +504,7 @@ public int consultaUsuarioListTotalPaginaPaginacao(String nome, Long userLogado)
 	}
 	
 	public BeanDtoGraficoSalarioUser montarGraficoMediaSalarial(Long userLogado ) throws Exception {
-		String sql = "select avg (rendamensal) as media_slarial, perfil from model_login where usuario_id = group by perfil";
+		String sql = "select avg (rendamensal) AS media_salarial, perfil FROM model_login where usuario_id =? GROUP BY perfil";
 		PreparedStatement preparedStatement = connection.prepareStatement(sql);
 		
 		preparedStatement.setLong(1, userLogado);
