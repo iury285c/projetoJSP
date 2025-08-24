@@ -16,6 +16,7 @@ import org.apache.tomcat.jakartaee.commons.compress.utils.IOUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import beandto.BeanDtoGraficoSalarioUser;
 import dao.DAOUsuarioRepository;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -175,7 +176,21 @@ public class ServletUsuarioController extends ServletGenericUtil {
 				response.getOutputStream().write(relatorio);
 			}
 			
-			
+			else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("graficoSalario")) {
+				String dataInicial =request.getParameter("dataInicial");
+				String dataFinal = request.getParameter("dataFinal");
+				
+				if (dataInicial ==  null || dataInicial.isEmpty() 
+						&& dataFinal == null || dataFinal.isEmpty()) {
+					BeanDtoGraficoSalarioUser beanDtoGraficoSalarioUser = daoUsuarioRepository.montarGraficoMediaSalarial(super.getUserLogado(request));
+					ObjectMapper mapper = new ObjectMapper();
+					String json = mapper.writeValueAsString(beanDtoGraficoSalarioUser);
+					response.getWriter().write(json);
+					
+				} else {
+					
+				}
+			}
 			else {
 				List<ModelLogin> modelLogins = daoUsuarioRepository.consultaUsuarioList(super.getUserLogado(request));
 				request.setAttribute("modelLogins", modelLogins);
