@@ -37,7 +37,7 @@
 												<!-- Basic Form Inputs card start -->
 												<div class="card">
 													<div class="card-block">
-														<h4 class="sub-title">Relatorio Usuário</h4>
+														<h4 class="sub-title">Relatorio Salarial</h4>
 
 														<form class="form-material" 
 															action="<%=request.getContextPath()%>/ServletUsuarioController"
