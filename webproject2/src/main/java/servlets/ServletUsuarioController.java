@@ -1,5 +1,6 @@
 package servlets;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -7,6 +8,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Formatter;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -23,6 +25,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import model.ModelLogin;
+import util.ReportUtil;
 
 
 @MultipartConfig
@@ -142,6 +145,34 @@ public class ServletUsuarioController extends ServletGenericUtil {
 				request.setAttribute("dataInicial", dataInicial);
 				request.setAttribute("datafinal", dataFinal);
 				request.getRequestDispatcher("principal/reluser.jsp").forward(request, response);
+			} else if (acao != null && !acao.isEmpty() && acao.equalsIgnoreCase("imprimirRelatorioPDF")
+					|| acao.equalsIgnoreCase("imprimirRelatorioExcel")) {
+				
+				String dataInicial =request.getParameter("dataInicial");
+				String dataFinal = request.getParameter("dataFinal");
+				List<ModelLogin> modelLogins = null;
+				if (dataInicial ==  null || dataInicial.isEmpty() 
+						&& dataFinal == null || dataFinal.isEmpty()) {
+					
+					modelLogins = daoUsuarioRepository.consultaUsuarioListRel(super.getUserLogado(request));
+				} else {
+					modelLogins = daoUsuarioRepository.consultaUsuarioListRel(super.getUserLogado(request),dataInicial, dataFinal);
+				}
+				
+				HashMap<String, Object> params = new HashMap<String, Object>();
+				params.put("PARAM_SUB_REPORT", request.getServletContext().getRealPath("relatorio") + File.separator);
+				byte[] relatorio = null;
+				String extensao = "";
+				if (acao.equalsIgnoreCase("imprimirRelatorioPDF")) {
+					relatorio = new ReportUtil().geraRelatorioPDF(modelLogins, "rel-user-jsp", params, request.getServletContext());
+					extensao = "pdf";
+				}else if ( acao.equalsIgnoreCase("imprimirRelatorioExcel")) {
+					relatorio = new ReportUtil().geraRelatorioExcel(modelLogins, "rel-user-jsp", params, request.getServletContext());
+					extensao = "xls";	
+				}
+				
+				response.setHeader("content-Disposition", "attachment;filename=arquivo." + extensao);
+				response.getOutputStream().write(relatorio);
 			}
 			
 			

@@ -30,10 +30,9 @@ public class ModelLogin implements Serializable {
 	private Double rendaMensal;
 	private List<ModelTelefone> telefones = new ArrayList<ModelTelefone>();
 	
-	public void setTelefone(List<ModelTelefone> telefones) {
-		this.telefones = telefones;
-	}
 	
+
+
 	public List<ModelTelefone> getTelefones() {
 		return telefones;
 	}
