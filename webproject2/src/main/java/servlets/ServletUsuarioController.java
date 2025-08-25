@@ -4,15 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Base64;
-import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 
-
-import org.apache.tomcat.jakartaee.commons.compress.utils.IOUtils;
+import org.apache.commons.compress.utils.IOUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -188,7 +184,11 @@ public class ServletUsuarioController extends ServletGenericUtil {
 					response.getWriter().write(json);
 					
 				} else {
-					
+					BeanDtoGraficoSalarioUser beanDtoGraficoSalarioUser =
+							daoUsuarioRepository.montarGraficoMediaSalarial(super.getUserLogado(request), dataInicial, dataFinal);
+					ObjectMapper mapper = new ObjectMapper();
+					String json = mapper.writeValueAsString(beanDtoGraficoSalarioUser);
+					response.getWriter().write(json);
 				}
 			}
 			else {

@@ -8,21 +8,18 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.annotation.WebFilter;
-import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.http.HttpRequest;
-import java.security.PrivateKey;
 import java.sql.Connection;
 import java.sql.SQLException;
-
-import javax.sql.ConnectionPoolDataSource;
-
-import org.apache.catalina.valves.rewrite.Substitution.StaticElement;
+import java.util.Scanner;
 
 import connection.SingleConnectionBanco;
+import dao.DaoVersionadorBanco;
 
 // Classe de filtro que será chamada antes de Servlets ou páginas JSP
 // OBS: o nome da classe está com "FIlterAutenticacao" 
@@ -111,8 +108,40 @@ public class FIlterAutenticacao implements Filter {
 	public void init(FilterConfig fConfig) throws ServletException {
         // Exemplo: pegar um parâmetro de inicialização
         // String parametro = fConfig.getInitParameter("nomeParametro");
-		
 		connection = SingleConnectionBanco.getConnection();
+		
+		DaoVersionadorBanco daoVersionadorBanco = new DaoVersionadorBanco();
+		String caminhoPastaSQL = fConfig.getServletContext().getRealPath("versionadorbancosql") + File.separator;
+		File[] filesSql = new File(caminhoPastaSQL).listFiles();
+		try {
+			
+			for (File file : filesSql) {
+				boolean arquivoJaRodado = daoVersionadorBanco.arquivoSqlRodado(file.getName());
+				if (!arquivoJaRodado) {
+					FileInputStream entradaArquivo = new FileInputStream(file);
+					Scanner lerArquivo = new Scanner(entradaArquivo, "UTF-8");
+					StringBuilder sql = new StringBuilder();
+					while (lerArquivo.hasNext()) {
+						sql.append(lerArquivo.nextLine());
+						sql.append("\n");
+						
+				
+					}
+					connection.prepareStatement(sql.toString()).execute();
+					daoVersionadorBanco.gravaArquivoSqlRodado(file.getName());
+					connection.commit();
+					lerArquivo.close();
+				}
+			}
+			
+		} catch (Exception e) {
+			try {
+				connection.rollback();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+			e.printStackTrace();
+		}
 	}
 
 }

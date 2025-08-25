@@ -3,7 +3,7 @@ package connection;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-import org.apache.tomcat.dbcp.dbcp2.DriverManagerConnectionFactory;
+import org.apache.commons.dbcp2.BasicDataSource;
 
 public class SingleConnectionBanco {
 
